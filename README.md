@@ -12,9 +12,13 @@
 
 <p align="center">
   <img src="examples/gift-open/out/preview.gif" alt="gift box opening" width="240">
-  <img src="examples/coin-spin/out/preview.gif" alt="coin turning" width="200">
-  <img src="examples/star-pop/out/preview.gif" alt="star popping in" width="220">
-  <img src="examples/fanfare/out/preview.gif" alt="party poppers throwing confetti" width="220">
+  <img src="examples/fanfare/out/preview.gif" alt="party poppers throwing confetti" width="240">
+  <img src="examples/trophy-hop/out/preview.gif" alt="trophy hopping" width="200">
+</p>
+<p align="center">
+  <img src="examples/bell-float/out/preview.gif" alt="bell floating" width="200">
+  <img src="examples/star-pop/out/preview.gif" alt="star popping in" width="200">
+  <img src="examples/coin-spin/out/preview.gif" alt="coin turning" width="180">
 </p>
 
 ## What it is
@@ -34,7 +38,7 @@ Polished app animations are often made the cheap way: render a few 3D stills, th
 | `spin` | Makes coin-style turning frames from one front image. |
 | `build` | Applies a preset and writes Lottie JSON with its images, plus `.lottie` or inline JSON. |
 | `render` | Renders frames headlessly with Skottie: PNG frames, a labeled contact sheet, or a GIF. |
-| `check` | Confirms the file parses, every image resolves, and the middle and last frames are not blank. |
+| `check` | Confirms the file parses, every image resolves, and the middle and last frames are not blank. Warns when content touches the canvas edge and when an image is far larger than it is shown. |
 | `pack` | Converts any Lottie to dotLottie (images inside) or to one JSON with base64 images. |
 | `inspect`, `edit` | Lists the layers of any Lottie and changes one layer's position, scale, rotation, opacity, or timing. |
 
@@ -74,24 +78,24 @@ At 156 a strip of light still shows; 182 is the smallest overlap that looks clos
 ```console
 $ image-to-lottie build examples/gift-open/config.json -o examples/gift-open/out/gift-open.json --lottie examples/gift-open/out/gift-open.lottie
 lottie: examples/gift-open/out/gift-open.json (600x720, 150 frames @ 60 fps, once)
-dotlottie: examples/gift-open/out/gift-open.lottie (728958 bytes)
+dotlottie: examples/gift-open/out/gift-open.lottie (728956 bytes)
 
 $ image-to-lottie check examples/gift-open/out/gift-open.lottie
 gift-open: 600x720, 60 fps, 150 frames (2.50s), 18 layers, 3 assets
 frame 0: 37.6% visible
-frame 74: 61.7% visible
+frame 74: 62.4% visible
 frame 149: 58.6% visible
 ok
 
-$ image-to-lottie render examples/gift-open/out/gift-open.lottie --frames 0,19,50,57,64,76,96,last --sheet examples/gift-open/out/sheet.png --bg "#eef3f9"
-sheet: examples/gift-open/out/sheet.png (frames 0, 19, 50, 57, 64, 76, 96, 149)
+$ image-to-lottie render examples/gift-open/out/gift-open.lottie --frames 0,19,50,57,64,70,96,last --sheet examples/gift-open/out/sheet.png --bg "#eef3f9"
+sheet: examples/gift-open/out/sheet.png (frames 0, 19, 50, 57, 64, 70, 96, 149)
 ```
 
 <p align="center">
   <img src="examples/gift-open/out/sheet.png" alt="contact sheet of the opening" width="90%">
 </p>
 
-The coin at the top is `spin` then `sequence`, the star is `pop-in`, and the confetti is `fanfare` from one popper image (`examples/fanfare`). All are in `examples/`.
+The other animations at the top, each from one or two generated images: confetti is `fanfare`, the trophy is `hop`, the bell is `float`, the star is `pop-in`, and the coin is `spin` then `sequence`. Their configs and outputs are in `examples/`.
 
 ## Requirements
 
@@ -156,7 +160,9 @@ Which output to ship:
 | JSON next to its images | Smallest JSON; serve the images from the same folder or set the asset path. |
 | `pack --inline` JSON | One JSON for players that cannot read `.lottie`. Largest. |
 
-Keep images near their display size before building; `spin --size` does this for frames.
+Keep images near their display size before building; `spin --size` does this for frames, and `build` warns about images that are far too large. For a web app that serves the images from its own path, add `--asset-base /images/anim/` to `build`.
+
+[`skills/image-to-lottie/references/pitfalls.md`](skills/image-to-lottie/references/pitfalls.md) lists the mistakes made while building these examples and what prevents each one.
 
 ## Repository layout
 

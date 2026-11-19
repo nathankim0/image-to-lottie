@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### Added
+
+- `check` warns when content touches the canvas edge (with frame numbers) and when an image is far larger than it is ever shown; `build` warns about oversized images too.
+- `build --asset-base <url>` writes the image path prefix a web app serves from.
+- `fanfare` options `tipAt` and `mouthAt` for poppers drawn at other angles; confetti size scales with the canvas.
+- Examples `trophy-hop` (`hop`) and `bell-float` (`float`), cut from one generated sheet.
+- Skill reference `pitfalls.md`: mistakes made while building the examples and what prevents each.
+
+### Changed
+
+- `gift-open`: the lid flies a shorter path and fades sooner, so it no longer leaves the canvas or lingers over the items.
+
 ## v0.2.0 (2026-11-19)
 
 ### Added

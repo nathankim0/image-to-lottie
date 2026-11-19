@@ -25,7 +25,9 @@ Without installing, prefix commands with `npx -y github:nathankim0/image-to-lott
 | Change an existing Lottie | `inspect`, `edit`, `render`, `check` |
 | Ship it | `pack --lottie` (dotLottie, images inside) or `--inline` (single JSON) |
 
-Ask only if the background matters (transparent is the default) or the user has brand colors.
+Before generating art, get one to three reference images or a named style; guessing the look
+leads to full redesigns. Otherwise ask only about the background (transparent is the default)
+and brand colors. Read `references/pitfalls.md` once per session; every item in it happened.
 
 ## 1. Make the images
 
@@ -39,6 +41,10 @@ Separate images drift apart; this is the most common failure. Use the prompt tem
 - no text, numbers, or logos
 
 Look at the sheet before going on. Regenerate rather than fix a bad sheet.
+
+If another agent (for example Codex) generates the image inside a git repo, tell it: "Only write
+the named file. Do not run git or edit anything else." Repo rules that say "commit after every
+change" otherwise make it try to commit unreviewed art.
 
 ## 2. Cut and fit
 
@@ -87,14 +93,21 @@ Look at the sheet. For openings also check the frames around the pop (the preset
 - loops: first and last frame match
 - items emerge from inside the box, not in front of it
 
+`check` also warns when content touches the canvas edge (with frame numbers) and when an image is
+far larger than it is ever shown. Render the flagged frames and look; edge contact is fine only
+for things meant to leave the frame, like falling confetti.
+
+Do not judge motion from timed screenshots of a live player: short beats are over before the
+capture lands. Pin frames (`render --frames`, or `setFrame(n)` in a paused web player).
+
 Make a GIF only when someone needs to see motion: `--gif out/preview.gif`.
 
 ## 5. Ship
 
 - dotLottie (`.lottie`): one file with images inside; use with `@lottiefiles/dotlottie-web`
   or `-react`. Best default for web.
-- JSON + images: smallest JSON, images served separately. Set the asset base for your app
-  (`u` in the JSON, or keep files next to the JSON).
+- JSON + images: smallest JSON, images served separately. Pass `build --asset-base /images/anim/`
+  so the JSON points where the app serves the images, or keep the files next to the JSON.
 - Inline JSON (`pack --inline`): one portable JSON for players that do not read `.lottie`.
 
 Keep images near their display size before building. A 768 px PNG shown at 200 px costs

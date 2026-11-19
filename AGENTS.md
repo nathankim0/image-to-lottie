@@ -50,6 +50,9 @@ assets/banner.png          README banner
 - Verify visual changes by rendering, not by reading JSON: `node dist/cli.js render <file> --frames ... --sheet <png>` and look at the image. Regenerate the committed example outputs when a preset's look changes.
 - Example art must be original and free of brands, logos, and text. Generate it fresh; never copy art from another project.
 - Keep committed example outputs small: `.lottie`, `sheet.png`, and `preview.gif` only (see `.gitignore`).
+- When you delegate image generation to another agent inside this repo, tell it to write only the named file and not to run git. Rule 1 applies to you, not to a delegated image job; review generated art before committing it.
+- Run `check` on every example you change and read its warnings. Edge warnings must be explained (intended exit) or fixed.
+- A mistake that cost a round of work goes into `skills/image-to-lottie/references/pitfalls.md`, with what prevents it.
 
 ## Commit messages
 

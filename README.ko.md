@@ -12,9 +12,13 @@
 
 <p align="center">
   <img src="examples/gift-open/out/preview.gif" alt="선물상자가 열리는 장면" width="240">
-  <img src="examples/coin-spin/out/preview.gif" alt="도는 동전" width="200">
-  <img src="examples/star-pop/out/preview.gif" alt="튀어나오는 별" width="220">
-  <img src="examples/fanfare/out/preview.gif" alt="색종이를 터뜨리는 폭죽" width="220">
+  <img src="examples/fanfare/out/preview.gif" alt="색종이를 터뜨리는 폭죽" width="240">
+  <img src="examples/trophy-hop/out/preview.gif" alt="통통 튀는 트로피" width="200">
+</p>
+<p align="center">
+  <img src="examples/bell-float/out/preview.gif" alt="둥실 떠 있는 종" width="200">
+  <img src="examples/star-pop/out/preview.gif" alt="튀어나오는 별" width="200">
+  <img src="examples/coin-spin/out/preview.gif" alt="도는 동전" width="180">
 </p>
 
 ## 무엇인가
@@ -34,7 +38,7 @@
 | `spin` | 정면 이미지 한 장으로 동전이 도는 프레임을 만듭니다. |
 | `build` | 프리셋을 적용해 이미지와 함께 Lottie JSON을 쓰고, `.lottie`나 이미지 내장 JSON도 만듭니다. |
 | `render` | Skottie로 브라우저 없이 렌더링합니다. PNG 프레임, 번호 붙은 프레임 모음, GIF. |
-| `check` | 파일이 열리는지, 이미지가 다 있는지, 중간·마지막 프레임이 비지 않았는지 확인합니다. |
+| `check` | 파일이 열리는지, 이미지가 다 있는지, 중간·마지막 프레임이 비지 않았는지 확인합니다. 내용이 화면 가장자리에 닿거나 이미지가 표시 크기보다 지나치게 크면 경고합니다. |
 | `pack` | 어떤 Lottie든 dotLottie(이미지 내장)나 base64 이미지가 든 JSON 한 파일로 바꿉니다. |
 | `inspect`, `edit` | 어떤 Lottie든 레이어 목록을 보고, 레이어 하나의 위치·크기·회전·투명도·타이밍을 바꿉니다. |
 
@@ -74,24 +78,24 @@ suggested starting point: overlap 200. Pick the smallest overlap where the openi
 ```console
 $ image-to-lottie build examples/gift-open/config.json -o examples/gift-open/out/gift-open.json --lottie examples/gift-open/out/gift-open.lottie
 lottie: examples/gift-open/out/gift-open.json (600x720, 150 frames @ 60 fps, once)
-dotlottie: examples/gift-open/out/gift-open.lottie (728958 bytes)
+dotlottie: examples/gift-open/out/gift-open.lottie (728956 bytes)
 
 $ image-to-lottie check examples/gift-open/out/gift-open.lottie
 gift-open: 600x720, 60 fps, 150 frames (2.50s), 18 layers, 3 assets
 frame 0: 37.6% visible
-frame 74: 61.7% visible
+frame 74: 62.4% visible
 frame 149: 58.6% visible
 ok
 
-$ image-to-lottie render examples/gift-open/out/gift-open.lottie --frames 0,19,50,57,64,76,96,last --sheet examples/gift-open/out/sheet.png --bg "#eef3f9"
-sheet: examples/gift-open/out/sheet.png (frames 0, 19, 50, 57, 64, 76, 96, 149)
+$ image-to-lottie render examples/gift-open/out/gift-open.lottie --frames 0,19,50,57,64,70,96,last --sheet examples/gift-open/out/sheet.png --bg "#eef3f9"
+sheet: examples/gift-open/out/sheet.png (frames 0, 19, 50, 57, 64, 70, 96, 149)
 ```
 
 <p align="center">
   <img src="examples/gift-open/out/sheet.png" alt="열리는 장면의 프레임 모음" width="90%">
 </p>
 
-맨 위의 동전은 `spin` 후 `sequence`, 별은 `pop-in`, 색종이는 폭죽 이미지 한 장으로 `fanfare`를 적용해 만들었습니다(`examples/fanfare`). 모두 `examples/`에 있습니다.
+맨 위의 나머지 애니메이션도 각각 이미지 한두 장으로 만들었습니다. 색종이는 `fanfare`, 트로피는 `hop`, 종은 `float`, 별은 `pop-in`, 동전은 `spin` 후 `sequence`입니다. 설정과 결과물은 `examples/`에 있습니다.
 
 ## 필요한 것
 
@@ -156,7 +160,9 @@ image-to-lottie edit out/star.json --layer glow --opacity 60 -o out/star-soft.js
 | 이미지와 나란히 둔 JSON | JSON이 가장 작습니다. 이미지를 같은 폴더에서 제공하거나 이미지 경로를 지정합니다. |
 | `pack --inline` JSON | `.lottie`를 못 읽는 플레이어용 JSON 한 파일. 가장 큽니다. |
 
-이미지는 빌드 전에 실제 표시 크기에 가깝게 줄여 두세요. 프레임은 `spin --size`가 알아서 줄입니다.
+이미지는 빌드 전에 실제 표시 크기에 가깝게 줄여 두세요. 프레임은 `spin --size`가 알아서 줄이고, 지나치게 큰 이미지는 `build`가 경고합니다. 웹 앱이 이미지를 자기 경로에서 제공한다면 `build`에 `--asset-base /images/anim/`을 붙이세요.
+
+[`skills/image-to-lottie/references/pitfalls.md`](skills/image-to-lottie/references/pitfalls.md)에 이 예시들을 만들며 겪은 시행착오와 막는 방법을 정리해 두었습니다.
 
 ## 저장소 구조
 
