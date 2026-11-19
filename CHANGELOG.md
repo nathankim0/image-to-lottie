@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.3.0 (2026-11-19)
+
 ### Added
 
 - `check` warns when content touches the canvas edge (with frame numbers) and when an image is far larger than it is ever shown; `build` warns about oversized images too.
