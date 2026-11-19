@@ -10,7 +10,7 @@ export function inspect(data) {
             inFrame: l.ip,
             outFrame: l.op,
             animated: Object.entries(PROPS)
-                .filter(([key]) => ks[key]?.a === 1)
+                .filter(([key]) => ks[key]?.a === 1 || (ks[key]?.s === true && ks[key]?.x?.a === 1))
                 .map(([, name]) => name),
             parent: l.parent,
             image: l.refId,
@@ -47,7 +47,8 @@ export function editLayer(data, ref, edit) {
             warnings.push(`${layer.nm}: ${name} was animated; it is now a fixed value`);
     };
     if (edit.position) {
-        const r = setStatic(layer.ks.p, [edit.position[0], edit.position[1], 0]);
+        const current = layer.ks.p;
+        const r = setStatic("s" in current && current.s === true ? current.x : current, [edit.position[0], edit.position[1], 0]);
         layer.ks.p = r.prop;
         note("position", r.replaced);
     }
@@ -68,11 +69,17 @@ export function editLayer(data, ref, edit) {
         note("opacity", r.replaced);
     }
     if (edit.shift) {
-        for (const prop of Object.values(layer.ks)) {
+        const props = [];
+        for (const v of Object.values(layer.ks)) {
+            if ("s" in v && v.s === true)
+                props.push(v.x, v.y);
+            else
+                props.push(v);
+        }
+        for (const prop of props)
             if (prop.a === 1)
                 for (const k of prop.k)
                     k.t += edit.shift;
-        }
     }
     if (edit.inFrame !== undefined)
         layer.ip = edit.inFrame;

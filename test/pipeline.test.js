@@ -172,3 +172,28 @@ test("parseFrames understands names, lists, and steps", () => {
   assert.deepEqual(parseFrames("every:50", 150), [0, 50, 100, 149]);
   assert.throws(() => parseFrames("200", 150), /outside/);
 });
+
+test("fanfare mirrors the right popper and throws seeded confetti on split x/y curves", async () => {
+  const popper = await loadPart("popper", join(dir, "parts", "item.png"));
+  const build = (seed) => getPreset("fanfare").build({ parts: { popper }, options: { pieces: 10, seed } });
+  const data = build(3);
+  const left = data.layers.find((l) => l.nm === "popper-left");
+  const right = data.layers.find((l) => l.nm === "popper-right");
+  assert.ok(left.ks.s.k[0].s[0] > 0 && right.ks.s.k[0].s[0] < 0, "right popper is mirrored");
+  const confetti = data.layers.filter((l) => l.nm.startsWith("confetti-"));
+  assert.equal(confetti.length, 20);
+  assert.equal(confetti[0].ks.p.s, true, "x and y move on separate curves");
+  assert.deepEqual(build(3), data, "same seed, same burst");
+  assert.notDeepEqual(build(4).layers[0].ks.p, data.layers[0].ks.p, "another seed, another burst");
+  const one = getPreset("fanfare").build({ parts: { popper }, options: { pieces: 10, sides: "left" } });
+  assert.equal(one.layers.filter((l) => l.nm.startsWith("popper-")).length, 1);
+
+  const out = join(dir, "fanfare", "fanfare.json");
+  await writeWithImages(data, [popper], out);
+  const r = await createRenderer(await loadAnimation(out), { background: "transparent" });
+  const px = r.pixels(40);
+  let visible = 0;
+  for (let i = 3; i < px.length; i += 4) if (px[i] > 8) visible++;
+  r.dispose();
+  assert.ok(visible > 500, `confetti and poppers render, got ${visible}`);
+});

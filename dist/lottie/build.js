@@ -39,10 +39,20 @@ export function transform(t) {
     return {
         o: t.opacity ?? fixed(100),
         r: t.rotation ?? fixed(0),
-        p: asProp(t.position, [0, 0, 0]),
+        p: isSplit(t.position) ? t.position : asProp(t.position, [0, 0, 0]),
         a: asProp(t.anchor, [0, 0, 0]),
         s: t.scale ?? fixed([100, 100, 100]),
     };
+}
+function isSplit(p) {
+    return typeof p === "object" && p !== null && p.s === true;
+}
+/** Position whose x and y move on separate curves, e.g. drag on x and gravity on y. */
+export function splitPosition(x, y) {
+    return { s: true, x, y };
+}
+export function rect(w, h, roundness = 0) {
+    return { ty: "rc", p: fixed([0, 0]), s: fixed([w, h]), r: fixed(roundness), d: 1 };
 }
 export function imageLayer(ctx, nm, ind, refId, ks, extra = {}) {
     return { ty: 2, nm, ind, ip: 0, op: ctx.op, st: 0, sr: 1, ao: 0, bm: 0, ks, refId, ...extra };

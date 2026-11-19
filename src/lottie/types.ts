@@ -12,10 +12,17 @@ export interface Keyframe {
 
 export type Prop = { a: 0; k: unknown } | { a: 1; k: Keyframe[] };
 
+/** Position with x and y animated separately (lets each axis have its own easing). */
+export interface SplitPosition {
+  s: true;
+  x: Prop;
+  y: Prop;
+}
+
 export interface Transform {
   o: Prop;
   r: Prop;
-  p: Prop;
+  p: Prop | SplitPosition;
   a: Prop;
   s: Prop;
 }

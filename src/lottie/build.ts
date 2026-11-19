@@ -1,5 +1,5 @@
 // Small builders for Lottie JSON: keyframes with named easing, transforms, layers.
-import type { Animation, ImageAsset, Keyframe, Layer, Prop, Transform, Vec } from "./types.js";
+import type { Animation, ImageAsset, Keyframe, Layer, Prop, SplitPosition, Transform, Vec } from "./types.js";
 
 /** Cubic-bezier easing as [[x1, y1], [x2, y2]]. */
 export type Ease = readonly [readonly [number, number], readonly [number, number]];
@@ -47,7 +47,7 @@ export function fixed(value: unknown): Prop {
 }
 
 export interface TransformInput {
-  position: Prop | Vec;
+  position: Prop | Vec | SplitPosition;
   anchor?: Prop | Vec;
   scale?: Prop;
   rotation?: Prop;
@@ -60,10 +60,23 @@ export function transform(t: TransformInput): Transform {
   return {
     o: t.opacity ?? fixed(100),
     r: t.rotation ?? fixed(0),
-    p: asProp(t.position, [0, 0, 0]),
+    p: isSplit(t.position) ? t.position : asProp(t.position, [0, 0, 0]),
     a: asProp(t.anchor, [0, 0, 0]),
     s: t.scale ?? fixed([100, 100, 100]),
   };
+}
+
+function isSplit(p: unknown): p is SplitPosition {
+  return typeof p === "object" && p !== null && (p as SplitPosition).s === true;
+}
+
+/** Position whose x and y move on separate curves, e.g. drag on x and gravity on y. */
+export function splitPosition(x: Prop, y: Prop): SplitPosition {
+  return { s: true, x, y };
+}
+
+export function rect(w: number, h: number, roundness = 0): unknown {
+  return { ty: "rc", p: fixed([0, 0]), s: fixed([w, h]), r: fixed(roundness), d: 1 };
 }
 
 export interface LayerContext {

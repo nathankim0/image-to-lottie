@@ -1,3 +1,4 @@
+import { fanfare } from "./fanfare.js";
 import { giftOpen } from "./gift-open.js";
 import { sequence } from "./sequence.js";
 import { float, hop, popIn } from "./subject.js";
@@ -6,6 +7,7 @@ export const presets = {
     [hop.name]: hop,
     [float.name]: float,
     [popIn.name]: popIn,
+    [fanfare.name]: fanfare,
     [sequence.name]: sequence,
 };
 export function getPreset(name) {
