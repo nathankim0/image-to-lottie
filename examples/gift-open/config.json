@@ -1,0 +1,8 @@
+{
+  "preset": "gift-open",
+  "width": 600,
+  "height": 720,
+  "fps": 60,
+  "parts": { "base": "parts/base.png", "lid": "parts/lid.png", "item": "parts/item.png" },
+  "options": { "overlap": 182, "items": 3, "itemWidth": 0.36, "glow": "#ffe7c2", "sparkle": "#ffc94a" }
+}
