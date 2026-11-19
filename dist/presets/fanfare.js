@@ -15,7 +15,7 @@ function random(seed) {
         return ((s >>> 0) % 100000) / 100000;
     };
 }
-function confettiPiece(ctx, ind, from, angleDeg, speed, start, life, floorY, color, kind, rnd) {
+function confettiPiece(ctx, ind, from, angleDeg, speed, start, life, floorY, color, kind, rnd, size) {
     const a = (angleDeg * Math.PI) / 180;
     const apexT = Math.round(life * (0.24 + rnd() * 0.08));
     const rise = speed * Math.sin(a);
@@ -45,7 +45,11 @@ function confettiPiece(ctx, ind, from, angleDeg, speed, start, life, floorY, col
         flipKeys.push([t, [i % 2 ? 15 : 100, 100, 100], EASE.sine]);
     }
     const spin = (rnd() < 0.5 ? -1 : 1) * (240 + rnd() * 360);
-    const shape = kind === 0 ? rect(24, 14, 2.5) : kind === 1 ? ellipse(15) : rect(7, 30, 3.5); // paper, dot, ribbon
+    const shape = kind === 0
+        ? rect(24 * size, 14 * size, 2.5 * size)
+        : kind === 1
+            ? ellipse(15 * size)
+            : rect(7 * size, 30 * size, 3.5 * size); // paper, dot, ribbon
     return shapeLayer(ctx, `confetti-${ind}`, ind, transform({
         position,
         rotation: anim([
@@ -74,6 +78,8 @@ export const fanfare = {
         { name: "pieces", type: "number", default: "34", description: "Confetti pieces per popper." },
         { name: "colors", type: "string", default: "#ff7a8a,#ffc94a,#b49cff,#5fd3a1,#5bb8ff", description: "Confetti colors, comma-separated." },
         { name: "seed", type: "number", default: "7", description: "Change for a different confetti pattern." },
+        { name: "tipAt", type: "string", default: "0.05,0.95", description: "Popper tip (the pivot) as x,y shares of the popper's visible box." },
+        { name: "mouthAt", type: "string", default: "0.7,0.3", description: "Center of the popper's mouth (where confetti starts) as x,y shares of its visible box." },
     ],
     build(input) {
         const part = requirePart(input, "popper", "fanfare");
@@ -93,8 +99,16 @@ export const fanfare = {
         const scale = (0.24 * W) / vw;
         // Pivot at the tip (lower-left of the visible popper); the mouth is near its upper-right.
         const vh = b.bottom - b.top + 1;
-        const tipImg = [b.left + vw * 0.05, b.bottom - vh * 0.05, 0];
-        const mouthImg = [b.right - vw * 0.3, b.top + vh * 0.3];
+        const share = (key, fallback) => {
+            const [x, y] = str(o, key, fallback).split(",").map(Number);
+            if (!Number.isFinite(x) || !Number.isFinite(y))
+                throw new Error(`Option "${key}" must look like 0.7,0.3`);
+            return [x, y];
+        };
+        const [tx, ty] = share("tipAt", "0.05,0.95");
+        const [mx, my] = share("mouthAt", "0.7,0.3");
+        const tipImg = [b.left + vw * tx, b.top + vh * ty, 0];
+        const mouthImg = [b.left + vw * mx, b.top + vh * my];
         const margin = W * 0.08;
         const poppers = [];
         const tipY = H - H * 0.07;
@@ -145,7 +159,7 @@ export const fanfare = {
                 const speed = H * (0.3 + rnd() * 0.32);
                 const start = popAt + Math.floor(rnd() * 5);
                 const life = f(70 + rnd() * 40);
-                confetti.push(confettiPiece(ctx, ind++, p.mouth, angle, speed, start, life, H + 40, colors[i % colors.length], i % 3, rnd));
+                confetti.push(confettiPiece(ctx, ind++, p.mouth, angle, speed, start, life, H + 40, colors[i % colors.length], i % 3, rnd, W / 600));
             }
             flashes.push(glow(ctx, ind++, p.mouth, W * 0.12, hex("#fff3c4"), {
                 scale: anim([

@@ -174,3 +174,26 @@ export async function writeGif(r, outPath, options = {}) {
     enc.finish();
     await writeFile(outPath, enc.bytes());
 }
+/**
+ * Frames where visible pixels sit on the outermost row or column. That usually means something is
+ * cropped (a lid flying off, confetti leaving the top); fine only for things meant to exit.
+ */
+export async function edgeFrames(anim, step = 6) {
+    const r = await createRenderer(anim, { background: "transparent", scale: 0.5 });
+    const hitsAt = [];
+    for (const f of parseFrames(`every:${step}`, r.frames)) {
+        const px = r.pixels(f);
+        const w = r.width;
+        const h = r.height;
+        const a = (x, y) => px[(x + y * w) * 4 + 3];
+        let hits = 0;
+        for (let x = 0; x < w; x++)
+            hits += Number(a(x, 0) > 24) + Number(a(x, h - 1) > 24);
+        for (let y = 0; y < h; y++)
+            hits += Number(a(0, y) > 24) + Number(a(w - 1, y) > 24);
+        if (hits > 2)
+            hitsAt.push(f);
+    }
+    r.dispose();
+    return hitsAt;
+}

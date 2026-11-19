@@ -13,7 +13,14 @@ import { spinFrames } from "../dist/image/spin.js";
 import { getPreset } from "../dist/presets/index.js";
 import { loadAnimation } from "../dist/pack/load.js";
 import { writeDotLottie, writeInlineJson, writeWithImages } from "../dist/pack/pack.js";
-import { createRenderer, parseFrames } from "../dist/render/skottie.js";
+import { createRenderer, edgeFrames, parseFrames } from "../dist/render/skottie.js";
+import { oversizedImages } from "../dist/lottie/lint.js";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+import { fileURLToPath } from "node:url";
+
+const run = promisify(execFile);
+const cli = fileURLToPath(new URL("../dist/cli.js", import.meta.url));
 import { editLayer, inspect } from "../dist/edit/edit.js";
 
 const dir = await mkdtemp(join(tmpdir(), "image-to-lottie-"));
@@ -196,4 +203,48 @@ test("fanfare mirrors the right popper and throws seeded confetti on split x/y c
   for (let i = 3; i < px.length; i += 4) if (px[i] > 8) visible++;
   r.dispose();
   assert.ok(visible > 500, `confetti and poppers render, got ${visible}`);
+});
+
+test("oversized images are flagged against the largest size they are shown at", async () => {
+  const big = await sheet(join(dir, "big.png"), 1600, 1600, [[100, 100, 1400, 1400, "#5bb8ff"]]);
+  const subject = await loadPart("subject", big);
+  const data = getPreset("float").build({ parts: { subject }, width: 300, height: 300, options: {} });
+  const warnings = oversizedImages(data);
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /image "subject" is 1600px wide but shown at most/);
+  const small = await loadPart("subject", join(dir, "parts", "item.png"));
+  assert.deepEqual(oversizedImages(getPreset("float").build({ parts: { subject: small }, options: {} })), []);
+});
+
+test("edgeFrames finds content cropped by the canvas edge", async () => {
+  const subject = await loadPart("subject", join(dir, "parts", "item.png"));
+  const inside = getPreset("float").build({ parts: { subject }, options: {} });
+  const insidePath = join(dir, "edge", "inside.json");
+  await writeWithImages(inside, [subject], insidePath);
+  assert.deepEqual(await edgeFrames(await loadAnimation(insidePath)), []);
+
+  const pushed = structuredClone(inside);
+  const layer = pushed.layers.find((l) => l.nm === "subject");
+  layer.ks.p = { a: 0, k: [0, 300, 0] }; // anchor on the left edge: half the subject is cut off
+  const pushedPath = join(dir, "edge", "pushed.json");
+  await writeWithImages(pushed, [subject], pushedPath);
+  assert.ok((await edgeFrames(await loadAnimation(pushedPath))).length > 0);
+});
+
+test("build --asset-base writes the image path prefix and still renders locally", async () => {
+  const out = join(dir, "web", "hop.json");
+  const { stdout } = await run("node", [cli, "build", "--preset", "hop", "--subject", join(dir, "parts", "item.png"), "--asset-base", "/images/anim/", "-o", out]);
+  assert.match(stdout, /lottie: /);
+  const data = JSON.parse(await readFile(out, "utf8"));
+  assert.equal(data.assets[0].u, "/images/anim/");
+  const anim = await loadAnimation(out);
+  assert.equal(anim.images.size, 1, "loader falls back to the image next to the JSON");
+});
+
+test("fanfare accepts tip and mouth positions and rejects malformed ones", async () => {
+  const popper = await loadPart("popper", join(dir, "parts", "item.png"));
+  const moved = getPreset("fanfare").build({ parts: { popper }, options: { pieces: 4, mouthAt: "0.5,0.5", tipAt: "0,1" } });
+  const base = getPreset("fanfare").build({ parts: { popper }, options: { pieces: 4 } });
+  assert.notDeepEqual(moved.layers[0].ks.p.x.k[0].s, base.layers[0].ks.p.x.k[0].s, "confetti starts from the new mouth");
+  assert.throws(() => getPreset("fanfare").build({ parts: { popper }, options: { mouthAt: "middle" } }), /must look like/);
 });

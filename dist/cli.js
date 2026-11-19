@@ -5,13 +5,14 @@ import { dirname, resolve } from "node:path";
 import { createRequire } from "node:module";
 import { loadFrames, loadParts, readConfig } from "./config.js";
 import { editLayer, inspect } from "./edit/edit.js";
+import { oversizedImages } from "./lottie/lint.js";
 import { fitLid } from "./image/fit.js";
 import { spinFrames } from "./image/spin.js";
 import { splitSheet } from "./image/split.js";
 import { loadAnimation } from "./pack/load.js";
 import { writeDotLottie, writeInlineJson, writeWithImages } from "./pack/pack.js";
 import { getPreset, presets } from "./presets/index.js";
-import { createRenderer, parseFrames, writeFrames, writeGif, writeSheet } from "./render/skottie.js";
+import { createRenderer, edgeFrames, parseFrames, writeFrames, writeGif, writeSheet } from "./render/skottie.js";
 const pkg = createRequire(import.meta.url)("../package.json");
 const program = new Command();
 program
@@ -93,6 +94,7 @@ program
     .requiredOption("-o, --out <json>", "output Lottie JSON; images are copied next to it")
     .option("--lottie <path>", "also write a dotLottie (.lottie) with images inside")
     .option("--inline <path>", "also write a single-file JSON with base64 images")
+    .option("--asset-base <url>", 'image path prefix written into the JSON, e.g. "/images/anim/" for a web app')
     .action(async (configPath, opts) => {
     let config;
     let dir = process.cwd();
@@ -135,7 +137,12 @@ program
         fps: config.fps,
         options: config.options,
     });
+    if (opts.assetBase)
+        for (const a of data.assets)
+            a.u = opts.assetBase;
     await writeWithImages(data, [...Object.values(parts), ...(frames ?? [])], opts.out);
+    for (const w of oversizedImages(data))
+        console.warn(`warning: ${w}`);
     console.log(`lottie: ${opts.out} (${data.w}x${data.h}, ${data.op} frames @ ${data.fr} fps, ${preset.playback})`);
     if (opts.lottie || opts.inline) {
         const loaded = await loadAnimation(opts.out);
@@ -200,8 +207,14 @@ program
         report.push(`frame ${f}: ${(share * 100).toFixed(1)}% visible${share === 0 && f === 0 ? " (blank start, fine for entrances)" : ""}`);
     }
     r.dispose();
+    const touching = await edgeFrames(anim);
     console.log(inspect(anim.data).summary);
     console.log(report.join("\n"));
+    if (touching.length) {
+        console.warn(`warning: content touches the canvas edge at frames ${touching.join(", ")}. Render them and look; it is fine only for things meant to leave the frame.`);
+    }
+    for (const w of oversizedImages(anim.data))
+        console.warn(`warning: ${w}`);
     // An entrance may start empty; the middle and the end must show something.
     if (shares.slice(1).some((s) => s === 0))
         throw new Error("The middle or last frame is blank");
