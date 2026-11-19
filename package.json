@@ -1,6 +1,6 @@
 {
   "name": "image-to-lottie",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Turn AI-generated raster part images into Lottie JSON and dotLottie animations with motion presets, verified by headless Skottie rendering.",
   "type": "module",
   "bin": {

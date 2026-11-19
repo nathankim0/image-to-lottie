@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.2.0 (2026-11-19)
+
 ### Added
 
 - `fanfare` preset: party poppers pull back, pop, and throw seeded confetti that arcs up and falls (x and y on separate curves), with paper flips, a mouth flash, and sparkles. Options: `sides`, `pieces`, `colors`, `seed`.
