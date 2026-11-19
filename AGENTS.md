@@ -9,7 +9,7 @@ Instructions for any coding agent (Claude Code, Codex, others) working in this r
 ```text
 src/cli.ts                 command line: presets, split, fit, spin, build, render, check, pack, inspect, edit
 src/lottie/                Lottie builders (keyframes, easing, layers) and shared effect layers
-src/presets/               motion presets: gift-open, hop, float, pop-in, sequence
+src/presets/               motion presets: gift-open, hop, float, pop-in, fanfare, sequence
 src/image/                 part loading, sheet split, lid fit, spin frames (sharp)
 src/render/skottie.ts      headless Skottie rendering: PNG frames, contact sheet, GIF
 src/pack/                  load .json/.lottie, write dotLottie and inline JSON

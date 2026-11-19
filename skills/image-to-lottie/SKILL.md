@@ -20,6 +20,7 @@ Without installing, prefix commands with `npx -y github:nathankim0/image-to-lott
 | --- | --- |
 | Something opens, splits, or reveals contents | parts sheet, `split`, `fit`, `build --preset gift-open` |
 | One object hops, floats, or pops in | one image, `build --preset hop / float / pop-in --subject` |
+| Celebration, success, "you won" | one popper image pointing up-right, `build --preset fanfare --part popper=popper.png` |
 | Motion a transform cannot fake (turning, morphing, flipping) | frames, `spin` or your own frames, `build --preset sequence --frames` |
 | Change an existing Lottie | `inspect`, `edit`, `render`, `check` |
 | Ship it | `pack --lottie` (dotLottie, images inside) or `--inline` (single JSON) |

@@ -14,6 +14,7 @@
   <img src="examples/gift-open/out/preview.gif" alt="gift box opening" width="240">
   <img src="examples/coin-spin/out/preview.gif" alt="coin turning" width="200">
   <img src="examples/star-pop/out/preview.gif" alt="star popping in" width="220">
+  <img src="examples/fanfare/out/preview.gif" alt="party poppers throwing confetti" width="220">
 </p>
 
 ## What it is
@@ -45,6 +46,7 @@ Presets:
 | `hop` | `subject` | Crouch, jump with a wiggle, squash on landing, breathe. Loops. |
 | `float` | `subject` | Gentle bob and sway, breathing shadow and glow. Loops. |
 | `pop-in` | `subject` | Springs in with a glow burst, particles, and sparkles. Once, then holds. |
+| `fanfare` | `popper` | Party poppers in both corners pull back, pop, and throw confetti that arcs and falls. Once, then holds. |
 | `sequence` | frame images | Flipbook of images in file name order. Loops. |
 
 ## Example
@@ -89,7 +91,7 @@ sheet: examples/gift-open/out/sheet.png (frames 0, 19, 50, 57, 64, 76, 96, 149)
   <img src="examples/gift-open/out/sheet.png" alt="contact sheet of the opening" width="90%">
 </p>
 
-The coin at the top is `spin` then `sequence`; the star is `pop-in`. Both are in `examples/`.
+The coin at the top is `spin` then `sequence`, the star is `pop-in`, and the confetti is `fanfare` from one popper image (`examples/fanfare`). All are in `examples/`.
 
 ## Requirements
 
@@ -160,7 +162,7 @@ Keep images near their display size before building; `spin --size` does this for
 
 ```text
 src/cli.ts               command line
-src/presets/             gift-open, hop, float, pop-in, sequence
+src/presets/             gift-open, hop, float, pop-in, fanfare, sequence
 src/lottie/              keyframes, easing, layers, shared effects (glow, shadow, sparkles, particles)
 src/image/               split, fit, spin, part loading
 src/render/skottie.ts    headless Skottie rendering, contact sheets, GIF

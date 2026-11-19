@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+
+- `fanfare` preset: party poppers pull back, pop, and throw seeded confetti that arcs up and falls (x and y on separate curves), with paper flips, a mouth flash, and sparkles. Options: `sides`, `pieces`, `colors`, `seed`.
+- Split x/y positions in the Lottie builders, so each axis can have its own easing. `inspect` and `edit` understand them.
+
 ## v0.1.0 (2026-11-19)
 
 ### Added

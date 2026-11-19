@@ -37,6 +37,18 @@ One image, 1024x1024, fully transparent background. No text, logos, or ground sh
 
 No split needed; pass it as `--subject`.
 
+## A celebration (fanfare)
+
+```text
+Soft glossy 3D render of ONE party popper (cone confetti shooter), <colors>, studio lighting.
+It points diagonally: narrow tip at the lower-left, wide open mouth at the upper-right, exactly
+45 degrees. The mouth is empty: no confetti or streamers. 1024x1024, fully transparent
+background, centered. No text, logos, or ground shadow.
+```
+
+Pass it as `--part popper=popper.png`. The preset mirrors it for the right corner and draws the
+confetti as vector shapes.
+
 ## A turning object (spin + sequence)
 
 ```text

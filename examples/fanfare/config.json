@@ -1,0 +1,7 @@
+{
+  "preset": "fanfare",
+  "width": 600,
+  "height": 600,
+  "parts": { "popper": "popper.png" },
+  "options": { "sides": "both", "pieces": 34, "seed": 7 }
+}

@@ -14,6 +14,7 @@
   <img src="examples/gift-open/out/preview.gif" alt="선물상자가 열리는 장면" width="240">
   <img src="examples/coin-spin/out/preview.gif" alt="도는 동전" width="200">
   <img src="examples/star-pop/out/preview.gif" alt="튀어나오는 별" width="220">
+  <img src="examples/fanfare/out/preview.gif" alt="색종이를 터뜨리는 폭죽" width="220">
 </p>
 
 ## 무엇인가
@@ -45,6 +46,7 @@
 | `hop` | `subject` | 웅크렸다 뛰고, 공중에서 흔들리고, 착지하며 찌그러진 뒤 숨 쉬듯 움직입니다. 반복. |
 | `float` | `subject` | 둥실 떠서 살짝 흔들리고, 그림자와 빛이 숨 쉬듯 변합니다. 반복. |
 | `pop-in` | `subject` | 빛이 터지고 알갱이·반짝이와 함께 튀어나옵니다. 한 번 재생 후 멈춤. |
+| `fanfare` | `popper` | 양쪽 아래 모서리의 폭죽이 살짝 젖혔다가 펑 터지고, 색종이가 포물선을 그리며 날다 떨어집니다. 한 번 재생 후 멈춤. |
 | `sequence` | 프레임 이미지들 | 파일 이름 순서대로 넘기는 플립북. 반복. |
 
 ## 예시
@@ -89,7 +91,7 @@ sheet: examples/gift-open/out/sheet.png (frames 0, 19, 50, 57, 64, 76, 96, 149)
   <img src="examples/gift-open/out/sheet.png" alt="열리는 장면의 프레임 모음" width="90%">
 </p>
 
-맨 위의 동전은 `spin` 후 `sequence`, 별은 `pop-in`으로 만들었습니다. 둘 다 `examples/`에 있습니다.
+맨 위의 동전은 `spin` 후 `sequence`, 별은 `pop-in`, 색종이는 폭죽 이미지 한 장으로 `fanfare`를 적용해 만들었습니다(`examples/fanfare`). 모두 `examples/`에 있습니다.
 
 ## 필요한 것
 
@@ -160,7 +162,7 @@ image-to-lottie edit out/star.json --layer glow --opacity 60 -o out/star-soft.js
 
 ```text
 src/cli.ts               명령줄
-src/presets/             gift-open, hop, float, pop-in, sequence
+src/presets/             gift-open, hop, float, pop-in, fanfare, sequence
 src/lottie/              키프레임, 이징, 레이어, 공통 효과(빛, 그림자, 반짝이, 알갱이)
 src/image/               split, fit, spin, 조각 불러오기
 src/render/skottie.ts    브라우저 없는 Skottie 렌더링, 프레임 모음, GIF
