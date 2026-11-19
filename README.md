@@ -10,6 +10,12 @@
 
 **Turn AI-generated images into Lottie and dotLottie animations, checked frame by frame without a browser.**
 
+<p align="center">
+  <img src="examples/gift-open/out/preview.gif" alt="gift box opening" width="240">
+  <img src="examples/coin-spin/out/preview.gif" alt="coin turning" width="200">
+  <img src="examples/star-pop/out/preview.gif" alt="star popping in" width="220">
+</p>
+
 ## What it is
 
 A command line tool and an agent skill for Claude Code and Codex. You generate a few still images (a box, its lid, a reward), and it cuts them apart, fits them together, moves them with a motion preset, and writes Lottie JSON or a `.lottie` file. Every result can be rendered to PNG, a contact sheet, or a GIF with Skia's Skottie, the same Lottie player Chrome and Flutter use.
@@ -80,16 +86,10 @@ sheet: examples/gift-open/out/sheet.png (frames 0, 19, 50, 57, 64, 76, 96, 149)
 ```
 
 <p align="center">
-  <img src="examples/gift-open/out/preview.gif" alt="gift box opening" width="280">
-  <img src="examples/gift-open/out/sheet.png" alt="contact sheet of the opening" width="62%">
+  <img src="examples/gift-open/out/sheet.png" alt="contact sheet of the opening" width="90%">
 </p>
 
-Two more in `examples/`: a coin turning (`spin` then `sequence`) and a star popping in (`pop-in`).
-
-<p align="center">
-  <img src="examples/coin-spin/out/preview.gif" alt="coin turning" width="200">
-  <img src="examples/star-pop/out/preview.gif" alt="star popping in" width="240">
-</p>
+The coin at the top is `spin` then `sequence`; the star is `pop-in`. Both are in `examples/`.
 
 ## Requirements
 

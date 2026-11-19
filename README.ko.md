@@ -10,6 +10,12 @@
 
 **AI로 만든 이미지를 Lottie·dotLottie 애니메이션으로 바꾸고, 브라우저 없이 프레임마다 확인합니다.**
 
+<p align="center">
+  <img src="examples/gift-open/out/preview.gif" alt="선물상자가 열리는 장면" width="240">
+  <img src="examples/coin-spin/out/preview.gif" alt="도는 동전" width="200">
+  <img src="examples/star-pop/out/preview.gif" alt="튀어나오는 별" width="220">
+</p>
+
 ## 무엇인가
 
 명령줄 도구이자 Claude Code·Codex용 에이전트 스킬입니다. 상자, 뚜껑, 보상처럼 정지 이미지 몇 장을 만들면 이 도구가 조각을 자르고, 맞추고, 모션 프리셋으로 움직여 Lottie JSON이나 `.lottie` 파일로 만듭니다. 결과는 Chrome과 Flutter가 쓰는 Lottie 플레이어인 Skia Skottie로 렌더링해 PNG, 프레임 모음 이미지, GIF로 바로 볼 수 있습니다.
@@ -80,16 +86,10 @@ sheet: examples/gift-open/out/sheet.png (frames 0, 19, 50, 57, 64, 76, 96, 149)
 ```
 
 <p align="center">
-  <img src="examples/gift-open/out/preview.gif" alt="선물상자가 열리는 장면" width="280">
-  <img src="examples/gift-open/out/sheet.png" alt="열리는 장면의 프레임 모음" width="62%">
+  <img src="examples/gift-open/out/sheet.png" alt="열리는 장면의 프레임 모음" width="90%">
 </p>
 
-`examples/`에 두 가지가 더 있습니다. 동전이 도는 장면(`spin` 후 `sequence`)과 별이 튀어나오는 장면(`pop-in`)입니다.
-
-<p align="center">
-  <img src="examples/coin-spin/out/preview.gif" alt="도는 동전" width="200">
-  <img src="examples/star-pop/out/preview.gif" alt="튀어나오는 별" width="240">
-</p>
+맨 위의 동전은 `spin` 후 `sequence`, 별은 `pop-in`으로 만들었습니다. 둘 다 `examples/`에 있습니다.
 
 ## 필요한 것
 
