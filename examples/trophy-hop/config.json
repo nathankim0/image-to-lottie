@@ -1,0 +1,7 @@
+{
+  "preset": "hop",
+  "width": 480,
+  "height": 480,
+  "parts": { "subject": "trophy.png" },
+  "options": { "jump": 0.13, "glow": "#ffe9b0", "sparkle": "#ffc94a" }
+}

@@ -1,0 +1,7 @@
+{
+  "preset": "float",
+  "width": 480,
+  "height": 480,
+  "parts": { "subject": "bell.png" },
+  "options": { "distance": 0.06, "glow": "#ffd3dc" }
+}
