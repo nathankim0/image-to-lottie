@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.1.0 (2026-11-19)
+
 ### Added
 
 - `build` with five presets: `gift-open` (box shakes, lid pops, items fan out), `hop`, `float`, `pop-in`, and `sequence` (frame images to a flipbook).
