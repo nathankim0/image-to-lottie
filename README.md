@@ -98,10 +98,10 @@ Two more in `examples/`: a coin turning (`spin` then `sequence`) and a star popp
 
 ## Install
 
-CLI, from GitHub:
+CLI, from the latest GitHub release:
 
 ```bash
-npm install -g github:nathankim0/image-to-lottie
+npm install -g https://github.com/nathankim0/image-to-lottie/releases/latest/download/image-to-lottie.tgz
 image-to-lottie presets
 ```
 

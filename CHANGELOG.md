@@ -12,3 +12,4 @@
 - `pack`: dotLottie (`.lottie`, images inside) and single-file JSON with base64 images.
 - `inspect` and `edit`: list layers of any Lottie and change one layer's position, scale, rotation, opacity, or timing.
 - Agent skill `image-to-lottie` with part-sheet prompts and motion rules.
+- Install from the release tarball (`npm install -g .../releases/latest/download/image-to-lottie.tgz`) or run with `npx github:nathankim0/image-to-lottie`.

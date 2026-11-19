@@ -31,8 +31,11 @@ assets/banner.png          README banner
      ```bash
      git tag -a vX.Y.Z -m "vX.Y.Z"
      git push origin vX.Y.Z
-     gh release create vX.Y.Z --title "vX.Y.Z" --notes-file <notes>
+     npm pack && mv image-to-lottie-X.Y.Z.tgz image-to-lottie.tgz
+     gh release create vX.Y.Z image-to-lottie.tgz --title "vX.Y.Z" --notes-file <notes>
+     rm image-to-lottie.tgz
      ```
+     The README installs `releases/latest/download/image-to-lottie.tgz`, so every release must attach a tarball with exactly that name.
 3. **Docs-only changes do not release.** README, AGENTS.md, images, comments, and typo fixes are committed and pushed with no version bump, tag, or release.
 4. **Keep READMEs in sync.** Any change to `README.md` gets the same change in `README.ko.md`, and the reverse.
 5. **Validate before committing** a distribution change: `npm test` must pass (it builds first).
@@ -41,7 +44,7 @@ assets/banner.png          README banner
 ## Project rules
 
 - New source is TypeScript under `src/`, ESM, strict. Tests run against `dist/`, so `npm test` builds first.
-- `dist/` is committed, because npm cannot build a GitHub dependency during `npm install -g` (it skips dev dependencies such as TypeScript). Run `npm run build` and commit `dist/` together with every `src/` change.
+- `dist/` is committed, so `npx github:nathankim0/image-to-lottie` needs no build step. Run `npm run build` and commit `dist/` together with every `src/` change. Global installs use the release tarball, because `npm install -g github:...` links a temporary clone that npm deletes.
 - A preset must state its parts and options in its `Preset` object; `image-to-lottie presets` prints them, and the README tables mirror them.
 - Motion follows `skills/image-to-lottie/references/motion.md`: named easing from `EASE`, one hero beat, supporting layers quieter than the hero. No linear movement.
 - Verify visual changes by rendering, not by reading JSON: `node dist/cli.js render <file> --frames ... --sheet <png>` and look at the image. Regenerate the committed example outputs when a preset's look changes.

@@ -9,7 +9,8 @@ Animate raster art the way product teams do it: render a few still images (often
 then move them with 2D transforms. The tool is the `image-to-lottie` CLI; this skill is
 the order to use it in and the checks that keep results honest.
 
-Install the CLI once: `npm install -g github:nathankim0/image-to-lottie` (Node 20+).
+Install the CLI once (Node 20+):
+`npm install -g https://github.com/nathankim0/image-to-lottie/releases/latest/download/image-to-lottie.tgz`.
 Without installing, prefix commands with `npx -y github:nathankim0/image-to-lottie`.
 `image-to-lottie presets` lists presets, their parts, and options.
 

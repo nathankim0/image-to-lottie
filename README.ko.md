@@ -98,10 +98,10 @@ sheet: examples/gift-open/out/sheet.png (frames 0, 19, 50, 57, 64, 76, 96, 149)
 
 ## 설치
 
-CLI, GitHub에서:
+CLI, GitHub 최신 릴리스에서:
 
 ```bash
-npm install -g github:nathankim0/image-to-lottie
+npm install -g https://github.com/nathankim0/image-to-lottie/releases/latest/download/image-to-lottie.tgz
 image-to-lottie presets
 ```
 
