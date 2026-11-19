@@ -16,6 +16,7 @@ src/pack/                  load .json/.lottie, write dotLottie and inline JSON
 src/edit/edit.ts           inspect and edit layers of any Lottie
 skills/image-to-lottie/    agent skill: SKILL.md and references
 examples/                  source art, configs, and committed outputs (.lottie, sheet.png, preview.gif)
+dist/                      compiled CLI, committed so GitHub installs need no build step
 test/pipeline.test.js      end-to-end tests against dist/
 assets/banner.png          README banner
 ```
@@ -40,6 +41,7 @@ assets/banner.png          README banner
 ## Project rules
 
 - New source is TypeScript under `src/`, ESM, strict. Tests run against `dist/`, so `npm test` builds first.
+- `dist/` is committed, because npm cannot build a GitHub dependency during `npm install -g` (it skips dev dependencies such as TypeScript). Run `npm run build` and commit `dist/` together with every `src/` change.
 - A preset must state its parts and options in its `Preset` object; `image-to-lottie presets` prints them, and the README tables mirror them.
 - Motion follows `skills/image-to-lottie/references/motion.md`: named easing from `EASE`, one hero beat, supporting layers quieter than the hero. No linear movement.
 - Verify visual changes by rendering, not by reading JSON: `node dist/cli.js render <file> --frames ... --sheet <png>` and look at the image. Regenerate the committed example outputs when a preset's look changes.
